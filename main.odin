@@ -10,7 +10,7 @@ main :: proc() {
     for !rl.WindowShouldClose() {
 
         rl.BeginDrawing()
-        rl.ClearBackground({15, 10, 10, 255})
+        rl.ClearBackground({20, 15, 15, 255})
         rl.EndDrawing()
     }
 
