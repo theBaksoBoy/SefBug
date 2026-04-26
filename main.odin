@@ -16,5 +16,6 @@ main :: proc() {
         rl.EndDrawing()
     }
 
+
     rl.CloseWindow()
 }
