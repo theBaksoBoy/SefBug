@@ -21,7 +21,7 @@ main :: proc() {
 
     paddle = Paddle{{1920/2, 1000, PADDLE_DEFAULT_LENGTH, 30}, PADDLE_DEFAULT_COLOR, 0, false, 0}
 
-    ball = Ball{{1920/2, 1080/2}, 300, {0, 1}}
+    ball = Ball{{1920/2, 1080/2}, 300, {0.05, 1}}
 
     bricks = make([dynamic]Brick)
     defer delete(bricks)
