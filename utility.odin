@@ -1,6 +1,7 @@
 package main
 
 import rl "vendor:raylib"
+import "core:math"
 
 
 Lerp :: proc(a, b, t: f32) -> f32 {
@@ -20,6 +21,22 @@ LerpColor :: proc (a, b: rl.Color, t: f32) -> rl.Color {
 
 
 
+RotatedVector2 :: proc (vec: rl.Vector2, angle: f32) -> rl.Vector2 {
+
+    sin_angle := math.sin_f32(angle)
+    cos_angle := math.cos_f32(angle)
+
+    return rl.Vector2{vec.x * cos_angle - vec.y * sin_angle, vec.x * sin_angle + vec.y * cos_angle}
+}
+
+
+
 Rotated45Vector2 :: proc (vec: rl.Vector2) -> rl.Vector2 {
-    return rl.Vector2{0.970710678 * (vec.x - vec.y), 0.970710678 * (vec.x + vec.y)}
+    return rl.Vector2{0.707106781 * (vec.x - vec.y), 0.707106781 * (vec.x + vec.y)}
+}
+
+
+
+V2DotProduct :: proc(a, b: rl.Vector2) -> f32 {
+    return a.x*b.x + a.y*b.y
 }
