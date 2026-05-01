@@ -39,7 +39,7 @@ UpdateBall :: proc(ball: ^Ball) {
             ball.pos + {-BALL_RADIUS * 0.707106781, -BALL_RADIUS * 0.707106781},
         }
 
-        for &collision_point in ball_collision_points {
+        outer: for &collision_point in ball_collision_points {
 
             // check for collision against the paddle
             if collision_point.x > paddle.rec.x && collision_point.x < paddle.rec.x + paddle.rec.width && collision_point.y > paddle.rec.y && collision_point.y < paddle.rec.y + paddle.rec.height && ball.dir.y > 0 {
@@ -53,7 +53,7 @@ UpdateBall :: proc(ball: ^Ball) {
                 if IsCollidingWithBrick(&brick, collision_point) {
                     BounceBallAlongNormal(ball, GetBrickCollisionNormal(&brick, ball.pos))
                     unordered_remove(&bricks, i)
-                    break
+                    break outer
                 }
             }
         }
