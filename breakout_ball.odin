@@ -48,10 +48,12 @@ UpdateBall :: proc(ball: ^Ball) {
             }
 
             // check for collision against bricks
-            for &brick in bricks {
+            for &brick, i in bricks {
 
                 if IsCollidingWithBrick(&brick, collision_point) {
                     BounceBallAlongNormal(ball, GetBrickCollisionNormal(&brick, ball.pos))
+                    unordered_remove(&bricks, i)
+                    break
                 }
             }
         }
