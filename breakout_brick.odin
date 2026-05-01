@@ -43,7 +43,7 @@ IsCollidingWithBrick :: proc(brick: ^Brick, point: rl.Vector2) -> bool {
     return false // needed or it will cry
 }
 
-GetBrickCollisionNormal :: proc(brick: ^Brick, point: rl.Vector2) -> rl.Vector2 {
+GetBrickCollisionNormal :: proc(brick: ^Brick, moving_body_center: rl.Vector2) -> rl.Vector2 {
     switch brick.brick_type {
 
     case .RECTANGLE:
@@ -57,8 +57,8 @@ GetBrickCollisionNormal :: proc(brick: ^Brick, point: rl.Vector2) -> rl.Vector2 
         c_positive: f32 = bottom_left.y - k * bottom_left.x
         c_negative: f32 = top_left.y - (-k) * top_left.x
 
-        above_positive_line: bool = point.y > k * point.x + c_positive
-        above_negative_line: bool = point.y > (-k) * point.x + c_negative
+        above_positive_line: bool = moving_body_center.y > k * moving_body_center.x + c_positive
+        above_negative_line: bool = moving_body_center.y > (-k) * moving_body_center.x + c_negative
 
         if above_positive_line && above_negative_line { // top side
             return {0, 1}
@@ -71,7 +71,7 @@ GetBrickCollisionNormal :: proc(brick: ^Brick, point: rl.Vector2) -> rl.Vector2 
         }
 
     case .CIRCLE:
-        return V2Normalized(point - brick.pos)
+        return V2Normalized(moving_body_center - brick.pos)
 
     case .RECTANGLE45:
         return {0, 0}
