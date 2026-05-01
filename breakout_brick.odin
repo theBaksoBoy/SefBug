@@ -31,9 +31,11 @@ IsCollidingWithBrick :: proc(brick: ^Brick, point: rl.Vector2) -> bool {
     switch brick.brick_type {
 
     case .RECTANGLE:
-        return false
+        return point.x > brick.pos.x && point.x < brick.pos.x + brick.size.x && point.y > brick.pos.y && point.y < brick.pos.y + brick.size.y
+
     case.CIRCLE:
         return V2Magnitude(point - brick.pos) < brick.size.x
+
     case.RECTANGLE45:
         return false
     }
@@ -45,10 +47,33 @@ GetBrickCollisionNormal :: proc(brick: ^Brick, point: rl.Vector2) -> rl.Vector2 
     switch brick.brick_type {
 
     case .RECTANGLE:
-        return {0, 0}
-    case.CIRCLE:
+        top_left := brick.pos
+        top_right := brick.pos + {brick.size.x, 0}
+        bottom_left := brick.pos + {0, brick.size.y}
+        bottom_right := brick.pos + brick.size
+
+        // find the slope and offset to make it go thought the points
+        k: f32 = (top_right.y - bottom_left.y) / (top_right.x - bottom_left.x)
+        c_positive: f32 = bottom_left.y - k * bottom_left.x
+        c_negative: f32 = top_left.y - (-k) * top_left.x
+
+        above_positive_line: bool = point.y > k * point.x + c_positive
+        above_negative_line: bool = point.y > (-k) * point.x + c_negative
+
+        if above_positive_line && above_negative_line { // top side
+            return {0, 1}
+        } else if !above_positive_line && !above_negative_line { // bottom side
+            return {0, -1}
+        } else if above_positive_line && !above_negative_line { // left side
+            return {-1, 0}
+        } else { // right side
+            return {1, 0}
+        }
+
+    case .CIRCLE:
         return V2Normalized(point - brick.pos)
-    case.RECTANGLE45:
+
+    case .RECTANGLE45:
         return {0, 0}
     }
 
