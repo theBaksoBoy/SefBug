@@ -40,3 +40,15 @@ Rotated45Vector2 :: proc (vec: rl.Vector2) -> rl.Vector2 {
 V2DotProduct :: proc(a, b: rl.Vector2) -> f32 {
     return a.x*b.x + a.y*b.y
 }
+
+
+
+V2Magnitude :: proc(a: rl.Vector2) -> f32 {
+    return math.sqrt(a.x*a.x + a.y*a.y)
+}
+
+
+
+V2Normalized :: proc(a: rl.Vector2) -> rl.Vector2 {
+    return a / V2Magnitude(a)
+}

@@ -2,6 +2,7 @@ package main
 
 import rl "vendor:raylib"
 import "core:math/rand"
+import "core:fmt"
 
 
 
@@ -41,16 +42,25 @@ UpdateBall :: proc(ball: ^Ball) {
         for &collision_point in ball_collision_points {
 
             // check for collision against the paddle
-            if collision_point.x > paddle.rec.x && collision_point.x < paddle.rec.x + paddle.rec.width && collision_point.y > paddle.rec.y && collision_point.y < paddle.rec.y + paddle.rec.height {
+            if collision_point.x > paddle.rec.x && collision_point.x < paddle.rec.x + paddle.rec.width && collision_point.y > paddle.rec.y && collision_point.y < paddle.rec.y + paddle.rec.height && ball.dir.y > 0 {
                 BounceBallAlongNormal(ball, {0, -1})
                 break
+            }
+
+            // check for collision against bricks
+            for &brick in bricks {
+
+                if IsCollidingWithBrick(&brick, collision_point) {
+                    BounceBallAlongNormal(ball, GetBrickCollisionNormal(&brick, ball.pos))
+                }
             }
         }
 
         // check for collision against left, right, and top of screen
-        if ball.pos.x - BALL_RADIUS < 0 do BounceBallAlongNormal(ball, {1, 0})
-        else if ball.pos.x + BALL_RADIUS > 1920 do BounceBallAlongNormal(ball, {-1, 0})
-        if ball.pos.y - BALL_RADIUS < 0 do BounceBallAlongNormal(ball, {0, 1})
+        if ball.pos.x - BALL_RADIUS < 0 && ball.dir.x < 0 do BounceBallAlongNormal(ball, {1, 0})
+        else if ball.pos.x + BALL_RADIUS > 1920 && ball.dir.x > 0 do BounceBallAlongNormal(ball, {-1, 0})
+        if ball.pos.y - BALL_RADIUS < 0 && ball.dir.y < 0 do BounceBallAlongNormal(ball, {0, 1})
+
 
     }
 }

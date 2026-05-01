@@ -27,6 +27,35 @@ Brick :: struct {
 
 
 
+IsCollidingWithBrick :: proc(brick: ^Brick, point: rl.Vector2) -> bool {
+    switch brick.brick_type {
+
+    case .RECTANGLE:
+        return false
+    case.CIRCLE:
+        return V2Magnitude(point - brick.pos) < brick.size.x
+    case.RECTANGLE45:
+        return false
+    }
+
+    return false // needed or it will cry
+}
+
+GetBrickCollisionNormal :: proc(brick: ^Brick, point: rl.Vector2) -> rl.Vector2 {
+    switch brick.brick_type {
+
+    case .RECTANGLE:
+        return {0, 0}
+    case.CIRCLE:
+        return V2Normalized(point - brick.pos)
+    case.RECTANGLE45:
+        return {0, 0}
+    }
+
+    return {0, 0} // needed or it will cry
+}
+
+
 DrawBrick :: proc(brick: ^Brick) {
     switch brick.brick_type {
 
