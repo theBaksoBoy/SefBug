@@ -83,6 +83,26 @@ GetBrickCollisionNormal :: proc(brick: ^Brick, moving_body_center: rl.Vector2) -
             if moving_body_center.x < center.x && moving_body_center.y < center.y do return {-0.707106781, -0.707106781}
             return {0.707106781, -0.707106781}
         }
+
+        // logic for most other rectangles where both sides aren't the same length
+        top := brick.pos
+        right := brick.pos + Rotated45Vector2({brick.size.x, 0})
+        left := brick.pos + Rotated45Vector2({0, brick.size.y})
+        bottom := brick.pos + Rotated45Vector2({brick.size.x, brick.size.y})
+
+        // find the slope and offset to make it go thought the points
+        k_vertical: f32 = (top.y - bottom.y) / (top.x - bottom.x)
+        k_horizontal: f32 = (right.y - left.y) / (right.x - left.x)
+        c_vertical: f32 = top.y - k_vertical * top.x
+        c_horizontal: f32 = left.y - k_horizontal * left.x
+
+        above_vertical_line: bool = moving_body_center.y > k_vertical * moving_body_center.x + c_vertical
+        above_horizontal_line: bool = moving_body_center.y > k_horizontal * moving_body_center.x + c_horizontal
+
+        if above_vertical_line && above_horizontal_line do return {-0.707106781, 0.707106781}
+        if !above_vertical_line && !above_horizontal_line do return {0.707106781, -0.707106781}
+        if above_vertical_line && !above_horizontal_line do return {-0.707106781, -0.707106781}
+        return {0.707106781, 0.707106781}
     }
 
     return {0, 0} // needed or it will cry
