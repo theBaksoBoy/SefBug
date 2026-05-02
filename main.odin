@@ -8,16 +8,24 @@ import "core:math"
 paddle: Paddle
 ball: Ball
 bricks: [dynamic]Brick
-
+breakout_camera: rl.Camera2D
 
 
 main :: proc() {
 
-    rl.InitWindow(1920, 1080, "SefBug")
+    monitor := rl.GetCurrentMonitor()
+    rl.InitWindow(rl.GetMonitorWidth(monitor), rl.GetMonitorHeight(monitor), "SefBug")
     rl.ToggleFullscreen()
     rl.SetExitKey(.KEY_NULL)
     rl.SetTargetFPS(60)
     rl.DisableCursor()
+
+    breakout_camera = rl.Camera2D{
+        {f32(rl.GetScreenWidth()) / 2, f32(rl.GetScreenHeight()) / 2},
+        {1920/2, 1080/2},
+        0,
+        1,
+    }
 
     paddle = Paddle{{1920/2, 1000, PADDLE_DEFAULT_LENGTH, 30}, PADDLE_DEFAULT_COLOR, 0, false, 0}
 
@@ -57,13 +65,20 @@ Draw :: proc() {
     rl.BeginDrawing()
     rl.ClearBackground({20, 15, 15, 255})
 
-    DrawBall(&ball)
+    // draw everything with the breakout camera's perspective
+    // note that the code doesn't need to be in a block, but it is done to make it more clear
+    // what is being done using the camera's perspective and not
+    rl.BeginMode2D(breakout_camera)
+    {
+        DrawBall(&ball)
 
-    DrawPaddle(&paddle)
+        DrawPaddle(&paddle)
 
-    for &brick in bricks {
-        DrawBrick(&brick)
+        for &brick in bricks {
+            DrawBrick(&brick)
+        }
     }
+    rl.EndMode2D()
 
     rl.EndDrawing()
 }
