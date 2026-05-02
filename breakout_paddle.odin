@@ -4,12 +4,12 @@ import rl "vendor:raylib"
 
 
 
-PADDLE_DEFAULT_LENGTH : f32 : 200
+PADDLE_DEFAULT_LENGTH : f32 : 2
 PADDLE_DEFAULT_COLOR :: rl.Color{255, 130, 0, 255}
-PADDLE_LONG_LENGTH : f32 : 400
+PADDLE_LONG_LENGTH : f32 : 4
 PADDLE_LONG_COLOR :: rl.Color{255, 0, 0, 255}
 PADDLE_POWERUP_TRANSITION_SPEED : f32 : 2
-PADDLE_LINE_WIDTH : f32 : 5
+PADDLE_LINE_WIDTH : f32 : 0.06
 
 
 
@@ -26,7 +26,7 @@ Paddle :: struct {
 UpdatePaddle :: proc(paddle: ^Paddle) {
 
     // move paddle
-    paddle.vel += rl.GetMouseDelta().x * 0.3
+    paddle.vel += rl.GetMouseDelta().x * 0.0025
     paddle.vel *= 0.7
     paddle.rec.x += paddle.vel
 
@@ -62,8 +62,8 @@ UpdatePaddle :: proc(paddle: ^Paddle) {
     if paddle.rec.x < 0 {
         paddle.rec.x = 0
         paddle.vel = 0
-    } else if paddle.rec.x + paddle.rec.width > 1920 {
-        paddle.rec.x = 1920 - paddle.rec.width
+    } else if paddle.rec.x + paddle.rec.width > 16 {
+        paddle.rec.x = 16 - paddle.rec.width
         paddle.vel = 0
     }
 }

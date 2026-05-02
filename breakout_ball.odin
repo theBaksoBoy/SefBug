@@ -6,8 +6,8 @@ import "core:fmt"
 
 
 
-BALL_RADIUS : f32 : 20
-BALL_LINE_WIDTH : f32 : 5
+BALL_RADIUS : f32 : 0.2
+BALL_LINE_WIDTH : f32 : 0.06
 BALL_COLOR :: rl.Color{0, 255, 123, 255}
 
 
@@ -60,7 +60,7 @@ UpdateBall :: proc(ball: ^Ball) {
 
         // check for collision against left, right, and top of screen
         if ball.pos.x - BALL_RADIUS < 0 && ball.dir.x < 0 do BounceBallAlongNormal(ball, {1, 0})
-        else if ball.pos.x + BALL_RADIUS > 1920 && ball.dir.x > 0 do BounceBallAlongNormal(ball, {-1, 0})
+        else if ball.pos.x + BALL_RADIUS > 16 && ball.dir.x > 0 do BounceBallAlongNormal(ball, {-1, 0})
         if ball.pos.y - BALL_RADIUS < 0 && ball.dir.y < 0 do BounceBallAlongNormal(ball, {0, 1})
 
 

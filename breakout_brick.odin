@@ -5,7 +5,7 @@ import "core:math"
 
 
 
-BRICK_LINE_WIDTH : f32 : 5
+BRICK_LINE_WIDTH : f32 : 0.06
 BRICK_COLOR :: rl.Color{200, 0, 75, 255}
 
 

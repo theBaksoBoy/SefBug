@@ -22,21 +22,21 @@ main :: proc() {
 
     breakout_camera = rl.Camera2D{
         {f32(rl.GetScreenWidth()) / 2, f32(rl.GetScreenHeight()) / 2},
-        {1920/2, 1080/2},
+        {16*0.5, 9*0.5},
         0,
-        1,
+        120,
     }
 
-    paddle = Paddle{{1920/2, 1000, PADDLE_DEFAULT_LENGTH, 30}, PADDLE_DEFAULT_COLOR, 0, false, 0}
+    paddle = Paddle{{16/2, 8, PADDLE_DEFAULT_LENGTH, 0.3}, PADDLE_DEFAULT_COLOR, 0, false, 0}
 
-    ball = Ball{{1920/2, 1080/2}, 300, {0, 1}}
+    ball = Ball{{16/2, 9/2}, 2, {0, 1}}
 
     bricks = make([dynamic]Brick)
     defer delete(bricks)
-    append(&bricks, Brick{.RECTANGLE, {300, 300}, {300, 100}})
-    append(&bricks, Brick{.CIRCLE, {700, 500}, {100, 0}})
-    append(&bricks, Brick{.RECTANGLE45, {100, 600}, {150, 30}})
-    append(&bricks, Brick{.RECTANGLE45, {1500, 500}, {200, 200}})
+    append(&bricks, Brick{.RECTANGLE, {4, 6}, {4, 1}})
+    append(&bricks, Brick{.CIRCLE, {10, 6}, {1, 0}})
+    append(&bricks, Brick{.RECTANGLE45, {1, 6}, {1.5, 0.3}})
+    append(&bricks, Brick{.RECTANGLE45, {15, 5}, {2, 2}})
 
     for !rl.WindowShouldClose() {
 
@@ -70,6 +70,12 @@ Draw :: proc() {
     // what is being done using the camera's perspective and not
     rl.BeginMode2D(breakout_camera)
     {
+        // draw border
+        rl.DrawRectangleRec({0, -0.06, 16, 0.06}, {100, 100, 100, 255})
+        rl.DrawRectangleRec({0, 9, 16, 0.06}, {100, 100, 100, 255})
+        rl.DrawRectangleRec({-0.06, 0, 0.06, 9}, {100, 100, 100, 255})
+        rl.DrawRectangleRec({16, 0, 0.06, 9}, {100, 100, 100, 255})
+
         DrawBall(&ball)
 
         DrawPaddle(&paddle)
