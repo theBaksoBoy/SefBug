@@ -27,7 +27,8 @@ main :: proc() {
     defer delete(bricks)
     append(&bricks, Brick{.RECTANGLE, {300, 300}, {300, 100}})
     append(&bricks, Brick{.CIRCLE, {700, 500}, {100, 0}})
-    append(&bricks, Brick{.RECTANGLE45, {1000, 600}, {150, 30}})
+    append(&bricks, Brick{.RECTANGLE45, {100, 600}, {150, 30}})
+    append(&bricks, Brick{.RECTANGLE45, {1500, 500}, {200, 200}})
 
     for !rl.WindowShouldClose() {
 
@@ -117,5 +118,11 @@ Draw :: proc() {
 DebugUpdate :: proc() {
     if rl.IsKeyPressed(.SPACE) {
         paddle.long_powerup_active = !paddle.long_powerup_active
+    }
+    if rl.IsKeyDown(.LEFT) {
+        ball.dir = RotatedVector2(ball.dir, -0.1)
+    }
+    if rl.IsKeyDown(.RIGHT) {
+        ball.dir = RotatedVector2(ball.dir, 0.1)
     }
 }

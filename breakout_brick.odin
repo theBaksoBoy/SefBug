@@ -37,7 +37,13 @@ IsCollidingWithBrick :: proc(brick: ^Brick, point: rl.Vector2) -> bool {
         return V2Magnitude(point - brick.pos) < brick.size.x
 
     case.RECTANGLE45:
-        return false
+        // c = y - x of point with slope
+        // c = y + x of point with -slope
+        return point.x + (brick.pos.y - brick.pos.x) < point.y \
+            && point.x + ((brick.pos.y + brick.size.y / 0.707106781) - brick.pos.x) > point.y \
+            && -point.x + (brick.pos.y + brick.pos.x) < point.y \
+            && -point.x + (brick.pos.y + (brick.pos.x + brick.size.x / 0.707106781)) > point.y
+
     }
 
     return false // needed or it will cry
@@ -60,21 +66,23 @@ GetBrickCollisionNormal :: proc(brick: ^Brick, moving_body_center: rl.Vector2) -
         above_positive_line: bool = moving_body_center.y > k * moving_body_center.x + c_positive
         above_negative_line: bool = moving_body_center.y > (-k) * moving_body_center.x + c_negative
 
-        if above_positive_line && above_negative_line { // top side
-            return {0, 1}
-        } else if !above_positive_line && !above_negative_line { // bottom side
-            return {0, -1}
-        } else if above_positive_line && !above_negative_line { // left side
-            return {-1, 0}
-        } else { // right side
-            return {1, 0}
-        }
+        if above_positive_line && above_negative_line do return {0, 1} // top side
+        if !above_positive_line && !above_negative_line do return {0, -1} // bottom side
+        if above_positive_line && !above_negative_line do return {-1, 0} // left side
+        return {1, 0} // right side
 
     case .CIRCLE:
         return V2Normalized(moving_body_center - brick.pos)
 
     case .RECTANGLE45:
-        return {0, 0}
+
+        if brick.size.x == brick.size.y { // linear lines used to check what quadrant it is will be completely horizontal and vertical if true
+            center: rl.Vector2 = {brick.pos.x, brick.pos.y + brick.size.y * 0.707106781}
+            if moving_body_center.x > center.x && moving_body_center.y > center.y do return {0.707106781, 0.707106781}
+            if moving_body_center.x < center.x && moving_body_center.y > center.y do return {-0.707106781, 0.707106781}
+            if moving_body_center.x < center.x && moving_body_center.y < center.y do return {-0.707106781, -0.707106781}
+            return {0.707106781, -0.707106781}
+        }
     }
 
     return {0, 0} // needed or it will cry
