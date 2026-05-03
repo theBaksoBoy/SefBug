@@ -86,6 +86,8 @@ Draw :: proc() {
     }
     rl.EndMode2D()
 
+    when ODIN_DEBUG do DebugDraw()
+
     rl.EndDrawing()
 }
 
@@ -101,4 +103,10 @@ DebugUpdate :: proc() {
     if rl.IsKeyDown(.RIGHT) {
         ball.dir = RotatedVector2(ball.dir, 0.1)
     }
+}
+
+
+
+DebugDraw :: proc() {
+    rl.DrawFPS(10, 10)
 }
