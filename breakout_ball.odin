@@ -21,11 +21,9 @@ Ball :: struct {
 
 UpdateBall :: proc(ball: ^Ball) {
 
-    quarter_step := ball.vel * ball.dir * rl.GetFrameTime() * 0.25
-
     // do movement and collision detection in quarter-steps
     for i in 0..<4 {
-        ball.pos += quarter_step
+        ball.pos += ball.vel * ball.dir * rl.GetFrameTime() * 0.25
 
         ball_collision_points: [8]rl.Vector2 = {
             ball.pos + {BALL_RADIUS, 0},

@@ -17,7 +17,7 @@ main :: proc() {
     rl.InitWindow(rl.GetMonitorWidth(monitor), rl.GetMonitorHeight(monitor), "SefBug")
     rl.ToggleFullscreen()
     rl.SetExitKey(.KEY_NULL)
-    rl.SetTargetFPS(10)
+    rl.SetTargetFPS(60)
     rl.DisableCursor()
 
     breakout_camera = rl.Camera2D{

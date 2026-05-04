@@ -30,6 +30,7 @@ UpdatePaddle :: proc(paddle: ^Paddle) {
     paddle.rec.x += paddle.vel * rl.GetFrameTime() * 0.5
     paddle.vel = ExpDecay(paddle.vel, 0, 16)
     paddle.rec.x += paddle.vel * rl.GetFrameTime() * 0.5
+
     // move camera in response to paddle movement
     breakout_camera_velocity.x += paddle.vel * rl.GetFrameTime() * 0.01
 
