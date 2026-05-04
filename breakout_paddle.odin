@@ -29,6 +29,8 @@ UpdatePaddle :: proc(paddle: ^Paddle) {
     paddle.vel += rl.GetMouseDelta().x * 0.1
     paddle.vel = ExpDecay(paddle.vel, 0, 16)
     paddle.rec.x += paddle.vel * rl.GetFrameTime()
+    // move camera in response to paddle movement
+    breakout_camera_velocity.x += paddle.vel * rl.GetFrameTime() * 0.01
 
 
     // update size of paddle when transitioning from powerup being activated or disabled

@@ -81,4 +81,7 @@ BounceBallAlongNormal :: proc(ball: ^Ball, normal: rl.Vector2) {
 
     // randomly rotate it a small amount
     ball.dir = RotatedVector2(ball.dir, rand.float32() * 0.2 - 0.2/2) // ~7 degree spread in each direction
+
+    // move camera target in response to the bounce
+    breakout_camera_velocity += normal * 0.03
 }

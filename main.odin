@@ -22,9 +22,9 @@ main :: proc() {
 
     breakout_camera = rl.Camera2D{
         {f32(rl.GetScreenWidth()) / 2, f32(rl.GetScreenHeight()) / 2},
-        {16*0.5, 9*0.5},
+        BREAKOUT_CAMERA_FOCUS,
         0,
-        120,
+        115,
     }
 
     paddle = Paddle{{16/2, 8, PADDLE_DEFAULT_LENGTH, 0.3}, PADDLE_DEFAULT_COLOR, 0, false, 0}
@@ -56,6 +56,7 @@ Update :: proc() {
 
     UpdatePaddle(&paddle)
     UpdateBall(&ball)
+    UpdateBreakoutCamera(&breakout_camera)
 }
 
 
@@ -71,8 +72,8 @@ Draw :: proc() {
     rl.BeginMode2D(breakout_camera)
     {
         // draw border
-        rl.DrawRectangleRec({0, -0.06, 16, 0.06}, {100, 100, 100, 255})
-        rl.DrawRectangleRec({0, 9, 16, 0.06}, {100, 100, 100, 255})
+        rl.DrawRectangleRec({-0.06, -0.06, 16.12, 0.06}, {100, 100, 100, 255})
+        rl.DrawRectangleRec({-0.06, 9, 16.12, 0.06}, {100, 100, 100, 255})
         rl.DrawRectangleRec({-0.06, 0, 0.06, 9}, {100, 100, 100, 255})
         rl.DrawRectangleRec({16, 0, 0.06, 9}, {100, 100, 100, 255})
 
