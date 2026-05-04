@@ -49,6 +49,7 @@ UpdateBall :: proc(ball: ^Ball) {
 
                 if IsCollidingWithBrick(&brick, collision_point) {
                     BounceBallAlongNormal(ball, GetBrickCollisionNormal(&brick, ball.pos))
+                    append(&brick_break_particles_instances, CreateBrickBreakParticles(&brick))
                     unordered_remove(&bricks, i)
                     break outer
                 }

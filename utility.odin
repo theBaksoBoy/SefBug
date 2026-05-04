@@ -21,6 +21,12 @@ LerpColor :: proc (a, b: rl.Color, t: f32) -> rl.Color {
 
 
 
+LerpVector2 :: proc(a, b: rl.Vector2, t: f32) -> rl.Vector2 {
+    return a + (b - a) * t;
+}
+
+
+
 // to make decay work the same no matter the FPS
 // decay has a useful range of approximately 1 to 25 (slow to fast)
 // use like this: value_to_decay = ExpDecay(value_to_decay, decay_to, 16)

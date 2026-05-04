@@ -8,6 +8,7 @@ import "core:math"
 paddle: Paddle
 ball: Ball
 bricks: [dynamic]Brick
+brick_break_particles_instances: [dynamic]BrickBreakParticles
 breakout_camera: rl.Camera2D
 
 
@@ -38,6 +39,8 @@ main :: proc() {
     append(&bricks, Brick{.RECTANGLE45, {1, 6}, {1.5, 0.3}})
     append(&bricks, Brick{.RECTANGLE45, {15, 5}, {2, 2}})
 
+    brick_break_particles_instances = make([dynamic]BrickBreakParticles)
+
     for !rl.WindowShouldClose() {
 
         Update()
@@ -53,6 +56,18 @@ Update :: proc() {
 
     // run special debug logic when testing the game
     when ODIN_DEBUG do DebugUpdate()
+
+    for &brick_break_particles_instance in brick_break_particles_instances {
+        UpdateBrickBreakParticles(&brick_break_particles_instance)
+    }
+
+    // delete brick break particles that are fully transparent
+    #reverse for &brick_break_particles_instance, i in brick_break_particles_instances {
+        if brick_break_particles_instance.alpha == 0 {
+            DeleteBrickBreakParticles(&brick_break_particles_instance)
+            unordered_remove(&brick_break_particles_instances, i)
+        }
+    }
 
     UpdatePaddle(&paddle)
     UpdateBall(&ball)
@@ -83,6 +98,10 @@ Draw :: proc() {
 
         for &brick in bricks {
             DrawBrick(&brick)
+        }
+
+        for &brick_break_particles_instance in brick_break_particles_instances {
+            DrawBrickBreakParticles(&brick_break_particles_instance)
         }
     }
     rl.EndMode2D()
