@@ -26,9 +26,9 @@ Paddle :: struct {
 UpdatePaddle :: proc(paddle: ^Paddle) {
 
     // move paddle
-    paddle.vel += rl.GetMouseDelta().x * 0.0025
-    paddle.vel *= 0.7
-    paddle.rec.x += paddle.vel
+    paddle.vel += rl.GetMouseDelta().x * 0.1
+    paddle.vel = ExpDecay(paddle.vel, 0, 16)
+    paddle.rec.x += paddle.vel * rl.GetFrameTime()
 
 
     // update size of paddle when transitioning from powerup being activated or disabled

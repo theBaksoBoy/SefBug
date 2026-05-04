@@ -21,6 +21,15 @@ LerpColor :: proc (a, b: rl.Color, t: f32) -> rl.Color {
 
 
 
+// to make decay work the same no matter the FPS
+// decay has a useful range of approximately 1 to 25 (slow to fast)
+// use like this: value_to_decay = ExpDecay(value_to_decay, decay_to, 16)
+ExpDecay :: proc (a, b, decay: f32) -> f32 {
+    return b + (a - b) * math.exp_f32(-decay * rl.GetFrameTime())
+}
+
+
+
 RotatedVector2 :: proc (vec: rl.Vector2, angle: f32) -> rl.Vector2 {
 
     sin_angle := math.sin_f32(angle)
