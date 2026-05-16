@@ -12,14 +12,14 @@ ExplosionParticles :: struct {
     count: int,
     positions: [dynamic]rl.Vector2,
     velocities: [dynamic]rl.Vector2,
+    rgb: [3]u8,
     alpha: f32,
 }
 
 
 
 DrawExplosionParticles :: proc(explosion_particles: ^ExplosionParticles) {
-    color := BRICK_COLOR
-    color[3] = u8(explosion_particles.alpha)
+    color: rl.Color = {explosion_particles.rgb[0], explosion_particles.rgb[1], explosion_particles.rgb[2], u8(explosion_particles.alpha)}
 
     for i in 0..<explosion_particles.count {
         rl.DrawRectangleV(explosion_particles.positions[i] - BRICK_LINE_WIDTH * 0.5, {BRICK_LINE_WIDTH, BRICK_LINE_WIDTH}, color)
@@ -63,6 +63,7 @@ CreateBrickBreakParticles :: proc(brick: ^Brick) -> ExplosionParticles {
         count,
         make([dynamic]rl.Vector2, count),
         make([dynamic]rl.Vector2, count),
+        {BRICK_COLOR[0], BRICK_COLOR[1], BRICK_COLOR[2]},
         255,
     }
 
@@ -120,3 +121,22 @@ CreateBrickBreakParticles :: proc(brick: ^Brick) -> ExplosionParticles {
 
 
 
+CreateBounceParticles :: proc(pos, normal: rl.Vector2) -> ExplosionParticles {
+
+    count := 10
+
+    bounce_particles := ExplosionParticles{
+        count,
+        make([dynamic]rl.Vector2, count),
+        make([dynamic]rl.Vector2, count),
+        {BALL_COLOR[0], BALL_COLOR[1], BALL_COLOR[2]},
+        255,
+    }
+
+    for i in 0..<count {
+        bounce_particles.positions[i] = pos
+        bounce_particles.velocities[i] = RotatedVector2(rand.float32() * normal, rand.float32() * 3 - 1.5)
+    }
+
+    return bounce_particles
+}

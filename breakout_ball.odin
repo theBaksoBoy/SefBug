@@ -78,6 +78,9 @@ BounceBallAlongNormal :: proc(ball: ^Ball, normal: rl.Vector2) {
     // bounce
     ball.dir = ball.dir - 2 * V2DotProduct(ball.dir, normal) * normal
 
+    // create bounce particles
+    append(&explosion_particles_instances, CreateBounceParticles(ball.pos - BALL_RADIUS * normal, normal))
+
     // randomly rotate it a small amount
     ball.dir = RotatedVector2(ball.dir, rand.float32() * 0.2 - 0.2/2) // ~7 degree spread in each direction
 
