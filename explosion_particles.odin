@@ -17,33 +17,33 @@ ExplosionParticles :: struct {
 
 
 
-DrawExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
+DrawExplosionParticles :: proc(explosion_particles: ^ExplosionParticles) {
     color := BRICK_COLOR
-    color[3] = u8(brick_break_particles.alpha)
+    color[3] = u8(explosion_particles.alpha)
 
-    for i in 0..<brick_break_particles.count {
-        rl.DrawRectangleV(brick_break_particles.positions[i] - BRICK_LINE_WIDTH * 0.5, {BRICK_LINE_WIDTH, BRICK_LINE_WIDTH}, color)
+    for i in 0..<explosion_particles.count {
+        rl.DrawRectangleV(explosion_particles.positions[i] - BRICK_LINE_WIDTH * 0.5, {BRICK_LINE_WIDTH, BRICK_LINE_WIDTH}, color)
     }
 }
 
 
 
-UpdateExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
+UpdateExplosionParticles :: proc(explosion_particles: ^ExplosionParticles) {
 
-    for i in 0..<brick_break_particles.count {
-        brick_break_particles.positions[i] += brick_break_particles.velocities[i] * rl.GetFrameTime()
+    for i in 0..<explosion_particles.count {
+        explosion_particles.positions[i] += explosion_particles.velocities[i] * rl.GetFrameTime()
     }
 
-    brick_break_particles.alpha -= rl.GetFrameTime() * 400
+    explosion_particles.alpha -= rl.GetFrameTime() * 400
 
-    if brick_break_particles.alpha < 0 do brick_break_particles.alpha = 0
+    if explosion_particles.alpha < 0 do explosion_particles.alpha = 0
 }
 
 
 
-DeleteExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
-    delete(brick_break_particles.positions)
-    delete(brick_break_particles.velocities)
+DeleteExplosionParticles :: proc(explosion_particles: ^ExplosionParticles) {
+    delete(explosion_particles.positions)
+    delete(explosion_particles.velocities)
 }
 
 
@@ -117,3 +117,6 @@ CreateBrickBreakParticles :: proc(brick: ^Brick) -> ExplosionParticles {
 
     return brick_break_particles
 }
+
+
+
