@@ -8,7 +8,7 @@ import "core:math"
 paddle: Paddle
 ball: Ball
 bricks: [dynamic]Brick
-brick_break_particles_instances: [dynamic]BrickBreakParticles
+explosion_particles_instances: [dynamic]ExplosionParticles
 breakout_camera: rl.Camera2D
 
 
@@ -39,7 +39,7 @@ main :: proc() {
     append(&bricks, Brick{.RECTANGLE45, {1, 6}, {1.5, 0.3}})
     append(&bricks, Brick{.RECTANGLE45, {15, 5}, {2, 2}})
 
-    brick_break_particles_instances = make([dynamic]BrickBreakParticles)
+    explosion_particles_instances = make([dynamic]ExplosionParticles)
 
     for !rl.WindowShouldClose() {
 
@@ -57,15 +57,15 @@ Update :: proc() {
     // run special debug logic when testing the game
     when ODIN_DEBUG do DebugUpdate()
 
-    for &brick_break_particles_instance in brick_break_particles_instances {
-        UpdateBrickBreakParticles(&brick_break_particles_instance)
+    for &explosion_particles_instance in explosion_particles_instances {
+        UpdateExplosionParticles(&explosion_particles_instance)
     }
 
     // delete brick break particles that are fully transparent
-    #reverse for &brick_break_particles_instance, i in brick_break_particles_instances {
-        if brick_break_particles_instance.alpha == 0 {
-            DeleteBrickBreakParticles(&brick_break_particles_instance)
-            unordered_remove(&brick_break_particles_instances, i)
+    #reverse for &explosion_particles_instance, i in explosion_particles_instances {
+        if explosion_particles_instance.alpha == 0 {
+            DeleteExplosionParticles(&explosion_particles_instance)
+            unordered_remove(&explosion_particles_instances, i)
         }
     }
 
@@ -100,8 +100,8 @@ Draw :: proc() {
             DrawBrick(&brick)
         }
 
-        for &brick_break_particles_instance in brick_break_particles_instances {
-            DrawBrickBreakParticles(&brick_break_particles_instance)
+        for &explosion_particles_instance in explosion_particles_instances {
+            DrawExplosionParticles(&explosion_particles_instance)
         }
     }
     rl.EndMode2D()

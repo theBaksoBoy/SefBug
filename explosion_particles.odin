@@ -8,7 +8,7 @@ import "core:math/rand"
 
 PARTICLES_PER_LENGTH_UNIT :: 20
 
-BrickBreakParticles :: struct {
+ExplosionParticles :: struct {
     count: int,
     positions: [dynamic]rl.Vector2,
     velocities: [dynamic]rl.Vector2,
@@ -17,7 +17,7 @@ BrickBreakParticles :: struct {
 
 
 
-DrawBrickBreakParticles :: proc(brick_break_particles: ^BrickBreakParticles) {
+DrawExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
     color := BRICK_COLOR
     color[3] = u8(brick_break_particles.alpha)
 
@@ -28,7 +28,7 @@ DrawBrickBreakParticles :: proc(brick_break_particles: ^BrickBreakParticles) {
 
 
 
-UpdateBrickBreakParticles :: proc(brick_break_particles: ^BrickBreakParticles) {
+UpdateExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
 
     for i in 0..<brick_break_particles.count {
         brick_break_particles.positions[i] += brick_break_particles.velocities[i] * rl.GetFrameTime()
@@ -41,14 +41,14 @@ UpdateBrickBreakParticles :: proc(brick_break_particles: ^BrickBreakParticles) {
 
 
 
-DeleteBrickBreakParticles :: proc(brick_break_particles: ^BrickBreakParticles) {
+DeleteExplosionParticles :: proc(brick_break_particles: ^ExplosionParticles) {
     delete(brick_break_particles.positions)
     delete(brick_break_particles.velocities)
 }
 
 
 
-CreateBrickBreakParticles :: proc(brick: ^Brick) -> BrickBreakParticles {
+CreateBrickBreakParticles :: proc(brick: ^Brick) -> ExplosionParticles {
 
     // calculate how many particles should be spawned, based on the size of the perimiter
     count: int
@@ -59,7 +59,7 @@ CreateBrickBreakParticles :: proc(brick: ^Brick) -> BrickBreakParticles {
         count = int(brick.size.x * 2 * math.PI * PARTICLES_PER_LENGTH_UNIT)
     }
 
-    brick_break_particles := BrickBreakParticles{
+    brick_break_particles := ExplosionParticles{
         count,
         make([dynamic]rl.Vector2, count),
         make([dynamic]rl.Vector2, count),
